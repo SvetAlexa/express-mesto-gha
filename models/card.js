@@ -5,23 +5,26 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 30
+    maxlength: 30,
   },
   link: {
     type: String,
-    required: true
+    required: true,
   },
   owner: {
-    type: ObjectId,
-    required: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
   },
-  likes: {
-    type: ObjectId,
-    required: true
-  },
+  likes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    default: [],
+  }],
   createdAt: {
-    type: Date
-  }
+    type: Date,
+    default: Date.now,
+  },
 });
 
 module.exports = mongoose.model('card', cardSchema);
