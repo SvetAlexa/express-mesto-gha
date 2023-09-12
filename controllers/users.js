@@ -11,12 +11,12 @@ const createUser = (req, res) => {
     .then((user) => {
       res.status(201).send({ data: user });
     })
-    .catch((evt) => {
-      if (evt instanceof mongoose.Error.ValidationError) {
+    .catch((err) => {
+      if (err instanceof mongoose.Error.ValidationError) {
         res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
         return;
       }
-      res.status(500).send({ message: evt.message });
+      res.status(500).send({ message: err.message });
     });
 };
 
@@ -25,8 +25,8 @@ const getUsers = (req, res) => {
     .then((users) => {
       res.status(200).send(users);
     })
-    .catch((evt) => {
-      res.status(500).send({ message: evt.message });
+    .catch((err) => {
+      res.status(500).send({ message: err.message });
     });
 };
 
@@ -39,12 +39,12 @@ const getUserById = (req, res) => {
       }
       return res.status(200).send(user);
     })
-    .catch((evt) => {
-      if (evt instanceof mongoose.Error.CastError) {
+    .catch((err) => {
+      if (err instanceof mongoose.Error.CastError) {
         res.status(400).send({ message: 'Переданы некорректные данные пользователя' });
         return;
       }
-      res.status(500).send({ message: evt.message });
+      res.status(500).send({ message: err.message });
     });
 };
 
@@ -63,14 +63,14 @@ const updateUserById = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: 'Пользователь по указанному _id не найден' });
       }
-      return res.status(201).send({ data: user });
+      return res.status(200).send({ data: user });
     })
-    .catch((evt) => {
-      if (evt instanceof mongoose.Error.ValidationError) {
+    .catch((err) => {
+      if (err instanceof mongoose.Error.ValidationError) {
         res.status(400).send({ message: 'Переданы некорректные данные при обновлении пользователя' });
         return;
       }
-      res.status(500).send({ message: evt.message });
+      res.status(500).send({ message: err.message });
     });
 };
 
@@ -89,14 +89,14 @@ const updateAvatar = (req, res) => {
       if (!user) {
         return res.status(404).send({ message: 'Пользователь по указанному _id не найден' });
       }
-      return res.status(201).send({ data: user });
+      return res.status(200).send({ data: user });
     })
-    .catch((evt) => {
-      if (evt instanceof mongoose.Error.ValidationError) {
+    .catch((err) => {
+      if (err instanceof mongoose.Error.ValidationError) {
         res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара' });
         return;
       }
-      res.status(500).send({ message: evt.message });
+      res.status(500).send({ message: err.message });
     });
 };
 
