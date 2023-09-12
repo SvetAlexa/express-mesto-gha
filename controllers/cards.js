@@ -88,7 +88,7 @@ const dislikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные для постановки лайка' });
+        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные для снятия лайка' });
         return;
       }
       res.status(ERROR_CODE).send({ message: err.message });
