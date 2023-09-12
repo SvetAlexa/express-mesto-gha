@@ -19,7 +19,7 @@ const createUser = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -28,8 +28,8 @@ const getUsers = (req, res) => {
     .then((users) => {
       res.status(OK_CODE).send(users);
     })
-    .catch((err) => {
-      res.status(ERROR_CODE).send({ message: err.message });
+    .catch(() => {
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -47,7 +47,7 @@ const getUserById = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные пользователя' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -73,7 +73,7 @@ const updateUserById = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при обновлении пользователя' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -99,7 +99,7 @@ const updateAvatar = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при обновлении аватара' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 

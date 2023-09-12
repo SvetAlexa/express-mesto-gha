@@ -15,7 +15,7 @@ const createCard = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при создании карточки' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -24,8 +24,8 @@ const getCards = (req, res) => {
     .then((cards) => {
       res.status(OK_CODE).send(cards);
     })
-    .catch((err) => {
-      res.status(ERROR_CODE).send({ message: err.message });
+    .catch(() => {
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -43,7 +43,7 @@ const deleteCardById = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные карточки' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -67,7 +67,7 @@ const likeCard = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные для постановки лайка' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -91,7 +91,7 @@ const dislikeCard = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные для снятия лайка' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
