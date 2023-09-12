@@ -12,7 +12,6 @@ const createUser = (req, res) => {
       res.status(201).send({ data: user });
     })
     .catch((evt) => {
-      console.log(evt);
       if (evt instanceof mongoose.Error.ValidationError) {
         res.status(400).send({ message: 'Переданы некорректные данные при создании пользователя' });
         return;
@@ -27,14 +26,12 @@ const getUsers = (req, res) => {
       res.status(200).send(users);
     })
     .catch((evt) => {
-      console.log(evt);
       res.status(500).send({ message: evt.message });
     });
 };
 
 const getUserById = (req, res) => {
   const { userId } = req.params;
-  console.log(userId);
   User.findById(userId)
     .then((user) => {
       if (!user) {
@@ -43,9 +40,60 @@ const getUserById = (req, res) => {
       return res.status(200).send(user);
     })
     .catch((evt) => {
-      console.log(evt);
       if (evt instanceof mongoose.Error.CastError) {
         res.status(400).send({ message: 'Переданы некорректные данные пользователя' });
+        return;
+      }
+      res.status(500).send({ message: evt.message });
+    });
+};
+
+const updateUserById = (req, res) => {
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { name, about },
+    {
+      new: true, // обработчик then получит на вход обновлённую запись
+      runValidators: true, // данные будут валидированы перед изменением
+      upsert: true, // если пользователь не найден, он будет создан
+    },
+  )
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Пользователь по указанному _id не найден' });
+      }
+      return res.status(201).send({ data: user });
+    })
+    .catch((evt) => {
+      if (evt instanceof mongoose.Error.ValidationError) {
+        res.status(400).send({ message: 'Переданы некорректные данные при обновлении пользователя' });
+        return;
+      }
+      res.status(500).send({ message: evt.message });
+    });
+};
+
+const updateAvatar = (req, res) => {
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(
+    req.user._id,
+    { avatar },
+    {
+      new: true, // обработчик then получит на вход обновлённую запись
+      runValidators: true, // данные будут валидированы перед изменением
+      upsert: true, // если пользователь не найден, он будет создан
+    },
+  )
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ message: 'Пользователь по указанному _id не найден' });
+      }
+      return res.status(201).send({ data: user });
+    })
+    .catch((evt) => {
+      if (evt instanceof mongoose.Error.ValidationError) {
+        res.status(400).send({ message: 'Переданы некорректные данные при обновлении аватара' });
         return;
       }
       res.status(500).send({ message: evt.message });
@@ -56,4 +104,6 @@ module.exports = {
   createUser,
   getUsers,
   getUserById,
+  updateUserById,
+  updateAvatar,
 };

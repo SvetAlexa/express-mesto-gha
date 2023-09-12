@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 // добавляем в каждый запрос объект user
 app.use((req, res, next) => {
   req.user = {
-    _id: '64ff99926e5431db1844ba2b',
+    _id: '6500842f38ebe294b39af652',
   };
   next();
 });
