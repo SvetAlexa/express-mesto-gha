@@ -40,7 +40,7 @@ const deleteCardById = (req, res) => {
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        res.status(ERROR_CODE).send({ message: 'Переданы некорректные данные карточки' });
+        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные карточки' });
         return;
       }
       res.status(ERROR_CODE).send({ message: err.message });
@@ -64,7 +64,7 @@ const likeCard = (req, res) => {
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        res.status(ERROR_CODE).send({ message: 'Переданы некорректные данные для постановки лайка' });
+        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные для постановки лайка' });
         return;
       }
       res.status(ERROR_CODE).send({ message: err.message });
@@ -88,7 +88,7 @@ const dislikeCard = (req, res) => {
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        res.status(ERROR_CODE).send({ message: 'Переданы некорректные данные для постановки лайка' });
+        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные для постановки лайка' });
         return;
       }
       res.status(ERROR_CODE).send({ message: err.message });
