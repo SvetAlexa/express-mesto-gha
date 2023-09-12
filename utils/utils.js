@@ -1,0 +1,13 @@
+const INVALID_ERROR_CODE = 400;
+const NOT_FOUND_CODE = 404;
+const ERROR_CODE = 500;
+const OK_CODE = 200;
+const CREATED_CODE = 201;
+
+module.exports = {
+  INVALID_ERROR_CODE,
+  NOT_FOUND_CODE,
+  ERROR_CODE,
+  OK_CODE,
+  CREATED_CODE,
+};
