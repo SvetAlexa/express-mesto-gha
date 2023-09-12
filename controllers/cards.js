@@ -38,6 +38,10 @@ const deleteCardById = (req, res) => {
       return res.status(200).send(card);
     })
     .catch((evt) => {
+      if (evt instanceof mongoose.Error.CastError) {
+        res.status(400).send({ message: 'Переданы некорректные данные карточки' });
+        return;
+      }
       res.status(500).send({ message: evt.message });
     });
 };
