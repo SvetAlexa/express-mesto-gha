@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const {
-  INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, OK_CODE, CREATED_CODE,
+  INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE,
 } = require('../utils/utils');
 const Card = require('../models/card');
 
@@ -22,7 +22,7 @@ const createCard = (req, res) => {
 const getCards = (req, res) => {
   Card.find({})
     .then((cards) => {
-      res.status(OK_CODE).send(cards);
+      res.send(cards);
     })
     .catch(() => {
       res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
@@ -36,7 +36,7 @@ const deleteCardById = (req, res) => {
       if (!card) {
         return res.status(NOT_FOUND_CODE).send({ message: 'Карточка с указанным _id не найдена' });
       }
-      return res.status(OK_CODE).send(card);
+      return res.send(card);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
@@ -60,7 +60,7 @@ const likeCard = (req, res) => {
       if (!card) {
         return res.status(NOT_FOUND_CODE).send({ message: 'Передан несуществующий _id карточки' });
       }
-      return res.status(OK_CODE).send({ data: card });
+      return res.send({ data: card });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
@@ -84,7 +84,7 @@ const dislikeCard = (req, res) => {
       if (!card) {
         return res.status(NOT_FOUND_CODE).send({ message: 'Передан несуществующий _id карточки' });
       }
-      return res.status(OK_CODE).send({ data: card });
+      return res.send({ data: card });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const {
-  INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, OK_CODE, CREATED_CODE,
+  INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE,
 } = require('../utils/utils');
 const User = require('../models/user');
 
@@ -26,7 +26,7 @@ const createUser = (req, res) => {
 const getUsers = (req, res) => {
   User.find({})
     .then((users) => {
-      res.status(OK_CODE).send(users);
+      res.send(users);
     })
     .catch(() => {
       res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
@@ -40,7 +40,7 @@ const getUserById = (req, res) => {
       if (!user) {
         return res.status(NOT_FOUND_CODE).send({ message: 'Пользователь по указанному _id не найден' });
       }
-      return res.status(OK_CODE).send(user);
+      return res.send(user);
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
@@ -59,14 +59,13 @@ const updateUserById = (req, res) => {
     {
       new: true, // обработчик then получит на вход обновлённую запись
       runValidators: true, // данные будут валидированы перед изменением
-      upsert: true, // если пользователь не найден, он будет создан
     },
   )
     .then((user) => {
       if (!user) {
         return res.status(NOT_FOUND_CODE).send({ message: 'Пользователь по указанному _id не найден' });
       }
-      return res.status(OK_CODE).send({ data: user });
+      return res.send({ data: user });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
@@ -85,14 +84,13 @@ const updateAvatar = (req, res) => {
     {
       new: true, // обработчик then получит на вход обновлённую запись
       runValidators: true, // данные будут валидированы перед изменением
-      upsert: true, // если пользователь не найден, он будет создан
     },
   )
     .then((user) => {
       if (!user) {
         return res.status(NOT_FOUND_CODE).send({ message: 'Пользователь по указанному _id не найден' });
       }
-      return res.status(OK_CODE).send({ data: user });
+      return res.send({ data: user });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
