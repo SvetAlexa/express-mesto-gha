@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
 const appRouter = require('./routes/index');
 
 const { PORT = 3000 } = process.env;
@@ -27,6 +28,8 @@ app.use(helmet());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cookieParser());
 
 // добавляем в каждый запрос объект user
 app.use((req, res, next) => {
