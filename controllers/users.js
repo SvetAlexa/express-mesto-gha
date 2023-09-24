@@ -112,7 +112,7 @@ const login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, 'secretKey', { expiresIn: '7d' });
       res.send({ token });
     })
     .catch(() => {
