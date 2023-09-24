@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const {
   INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE,
 } = require('../utils/utils');
@@ -6,10 +7,19 @@ const User = require('../models/user');
 
 const createUser = (req, res) => {
   // получим из объекта запроса имя,описание и ссылку на аватар пользователя
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
   // создадим документ в БД на основе пришедших данных
-  User.create({ name, about, avatar })
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => User.create({
+      name: req.body.name,
+      about: req.body.about,
+      avatar: req.body.avatar,
+      email: req.body.email,
+      password: hash, // записываем хеш в базу
+    }))
     // вернём записанные в базу данные
     .then((user) => {
       res.status(CREATED_CODE).send({ data: user });
@@ -19,7 +29,7 @@ const createUser = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
         return;
       }
-      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
+      res.status(ERROR_CODE).send({ message: err.message });
     });
 };
 
