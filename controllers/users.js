@@ -1,16 +1,12 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const {
-  INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE,
+  INVALID_ERROR_CODE, UNAUTHORIZED_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE,
 } = require('../utils/utils');
 const User = require('../models/user');
 
 const createUser = (req, res) => {
-  // получим из объекта запроса имя,описание и ссылку на аватар пользователя
-  const {
-    name, about, avatar, email, password,
-  } = req.body;
-
   // создадим документ в БД на основе пришедших данных
   bcrypt.hash(req.body.password, 10)
     .then((hash) => User.create({
@@ -111,10 +107,24 @@ const updateAvatar = (req, res) => {
     });
 };
 
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, { expiresIn: '7d' });
+      res.send({ token });
+    })
+    .catch(() => {
+      res.status(UNAUTHORIZED_CODE).send({ message: 'Войти не удалось' });
+    });
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUserById,
   updateUserById,
   updateAvatar,
+  login,
 };
