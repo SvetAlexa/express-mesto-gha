@@ -6,8 +6,7 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const appRouter = require('./routes/index');
 
-const { PORT } = process.env;
-console.log(process.env.SECRET_KEY);
+const { PORT = 3000 } = process.env;
 
 mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
   useNewUrlParser: true,
