@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const {
-  INVALID_ERROR_CODE, UNAUTHORIZED_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE,
+  INVALID_ERROR_CODE, UNAUTHORIZED_CODE, NOT_FOUND_CODE, CONFLICT_ERROR, ERROR_CODE, CREATED_CODE,
+  MONGO_DUPLICATE_ERROR_CODE,
 } = require('../utils/utils');
 const User = require('../models/user');
 
@@ -21,10 +22,14 @@ const createUser = (req, res) => {
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
-        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
-        return;
+        console.log(err);
+        return res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при создании пользователя' });
       }
-      res.status(ERROR_CODE).send({ message: err.message });
+      if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
+        return res.status(CONFLICT_ERROR).send({ message: 'Такой пользователь уже существует' });
+      }
+      console.log(err);
+      return res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
 
@@ -111,6 +116,7 @@ const login = (req, res) => {
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      console.log(process.env.SECRET_KEY);
       const token = jwt.sign({ _id: user._id }, 'secretKey', { expiresIn: '7d' });
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,

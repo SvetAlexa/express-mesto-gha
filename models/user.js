@@ -31,7 +31,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: 6,
+    minlength: 8,
+    selected: true,
   },
 }, { versionKey: false });
 
@@ -46,7 +47,7 @@ userSchema.statics.findUserByCredentials = function (email, password) {
           if (!matched) {
             return Promise.reject(new Error('Неправильные почта или пароль'));
           }
-          return user; // теперь user доступен
+          return user;
         });
     });
 };
