@@ -81,6 +81,24 @@ const getUserById = (req, res) => {
     });
 };
 
+const getAuthorizedUser = (req, res) => {
+  const userId = req.user._id;
+  User.findById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(NOT_FOUND_CODE).send({ message: 'Пользователь по указанному _id не найден' });
+      }
+      return res.send(user);
+    })
+    .catch((err) => {
+      if (err instanceof mongoose.Error.CastError) {
+        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные пользователя' });
+        return;
+      }
+      res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
+    });
+};
+
 const updateUserById = (req, res) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(
@@ -135,6 +153,7 @@ module.exports = {
   createUser,
   getUsers,
   getUserById,
+  getAuthorizedUser,
   updateUserById,
   updateAvatar,
   login,
