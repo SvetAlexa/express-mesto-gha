@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const {
-  INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE,
+  INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE, CONFLICT_ERROR,
 } = require('../utils/utils');
 const Card = require('../models/card');
 
@@ -31,13 +31,19 @@ const getCards = (req, res) => {
 
 const deleteCardById = (req, res) => {
   const { cardId } = req.params;
-  Card.findByIdAndDelete(cardId)
+  Card.findById(cardId)
     .then((card) => {
       if (!card) {
         return res.status(NOT_FOUND_CODE).send({ message: 'Карточка с указанным _id не найдена' });
       }
-      return res.send(card);
+      const ownerId = (card.owner).toString();
+      const userId = req.user._id;
+      if (ownerId !== userId) {
+        return res.status(CONFLICT_ERROR).send({ message: 'Ошибка доступа' });
+      }
+      return Card.findByIdAndRemove(cardId);
     })
+    .then((deletedCard) => res.send(deletedCard))
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные карточки' });
