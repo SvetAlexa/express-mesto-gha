@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const {
-  INVALID_ERROR_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE, CONFLICT_ERROR,
+  INVALID_ERROR_CODE, FORBIDDEN_CODE, NOT_FOUND_CODE, ERROR_CODE, CREATED_CODE,
 } = require('../utils/utils');
 const Card = require('../models/card');
 
@@ -34,12 +34,14 @@ const deleteCardById = (req, res) => {
   Card.findById(cardId)
     .then((card) => {
       if (!card) {
-        return res.status(NOT_FOUND_CODE).send({ message: 'Карточка с указанным _id не найдена' });
+        return Promise.reject(new Error('Карточка с указанным _id не найдена'));
+      // return res.status(NOT_FOUND_CODE).send({ message: 'Карточка с указанным _id не найдена' });
       }
       const ownerId = (card.owner).toString();
       const userId = req.user._id;
       if (ownerId !== userId) {
-        return res.status(CONFLICT_ERROR).send({ message: 'Ошибка доступа' });
+        return Promise.reject(new Error('forbidden'));
+        // return res.status(FORBIDDEN_CODE).send({ message: 'Ошибка доступа' });
       }
       return Card.findByIdAndRemove(cardId);
     })
@@ -49,6 +51,11 @@ const deleteCardById = (req, res) => {
         res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные карточки' });
         return;
       }
+      if ({ err: 'forbidden' }) {
+        res.status(FORBIDDEN_CODE).send({ message: 'Ошибка доступа' });
+        return;
+      }
+      console.log(err);
       res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
     });
 };
