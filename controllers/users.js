@@ -7,6 +7,8 @@ const {
 } = require('../utils/utils');
 const User = require('../models/user');
 
+const { SECRET_KEY = 'SECRET_KEY' } = process.env;
+
 const createUser = (req, res) => {
   const {
     name, about, avatar, email,
@@ -30,6 +32,24 @@ const createUser = (req, res) => {
       }
       console.log(err);
       return res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
+    });
+};
+
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: '7d' });
+      res.send({ token });
+    })
+    .catch((err) => {
+      if (err instanceof mongoose.Error.ValidationError) {
+        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при обновлении аватара' });
+        return;
+      }
+      console.log(err);
+      res.status(UNAUTHORIZED_CODE).send({ message: 'Войти не удалось' });
     });
 };
 
@@ -108,28 +128,6 @@ const updateAvatar = (req, res) => {
         return;
       }
       res.status(ERROR_CODE).send({ message: 'На сервере произошла ошибка' });
-    });
-};
-
-const login = (req, res) => {
-  const { email, password } = req.body;
-
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      console.log(process.env.SECRET_KEY);
-      const token = jwt.sign({ _id: user._id }, 'secretKey', { expiresIn: '7d' });
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-      }).send({ token });
-    })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        res.status(INVALID_ERROR_CODE).send({ message: 'Переданы некорректные данные при обновлении аватара' });
-        return;
-      }
-      console.log(err);
-      res.status(UNAUTHORIZED_CODE).send({ message: 'Войти не удалось' });
     });
 };
 
