@@ -30,9 +30,6 @@ const createUser = (req, res, next) => {
       });
     })
     .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        return next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
-      }
       if (err.code === MONGO_DUPLICATE_ERROR_CODE) {
         return next(new ConflictError('Такой пользователь уже существует'));
       }
@@ -109,12 +106,7 @@ const updateUserById = (req, res, next) => {
       }
       return res.send({ data: user });
     })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        return next(new BadRequestError('Переданы некорректные данные при обновлении пользователя'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 const updateAvatar = (req, res, next) => {
@@ -133,12 +125,7 @@ const updateAvatar = (req, res, next) => {
       }
       return res.send({ data: user });
     })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        return next(new BadRequestError('Переданы некорректные данные при обновлении аватара'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 module.exports = {

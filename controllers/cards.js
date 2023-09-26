@@ -11,12 +11,7 @@ const createCard = (req, res, next) => {
     .then((card) => {
       res.status(CREATED_CODE).send({ data: card });
     })
-    .catch((err) => {
-      if (err instanceof mongoose.Error.ValidationError) {
-        return next(new BadRequestError('Переданы некорректные данные при создании карточки'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 const getCards = (req, res, next) => {
@@ -42,12 +37,7 @@ const deleteCardById = (req, res, next) => {
       return Card.findByIdAndRemove(cardId);
     })
     .then((deletedCard) => res.send(deletedCard))
-    .catch((err) => {
-      if (err instanceof mongoose.Error.CastError) {
-        return next(new BadRequestError('Переданы некорректные данные карточки'));
-      }
-      return next(err);
-    });
+    .catch(next);
 };
 
 const likeCard = (req, res, next) => {
