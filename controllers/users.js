@@ -15,9 +15,11 @@ const createUser = (req, res, next) => {
   } = req.body;
   // создадим документ в БД на основе пришедших данных
   bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, email, password: hash, // записываем хеш в базу
-    }))
+    .then((hash) => User.create(
+      {
+        name, about, avatar, email, password: hash, // записываем хеш в базу
+      },
+    ))
     // вернём записанные в базу данные
     .then((user) => {
       const { _id } = user;

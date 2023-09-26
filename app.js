@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const { errors } = require('celebrate');
 const mongoose = require('mongoose');
 const appRouter = require('./routes/index');
 const errorHandle = require('./middlewares/errorHandle');
@@ -31,5 +32,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(appRouter);
+
+app.use(errors());
 
 app.use(errorHandle);
