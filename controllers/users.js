@@ -20,7 +20,12 @@ const createUser = (req, res) => {
     }))
     // вернём записанные в базу данные
     .then((user) => {
-      res.status(CREATED_CODE).send({ data: user });
+      const { _id } = user;
+      res.status(CREATED_CODE).send({
+        data: {
+          name, about, avatar, _id,
+        },
+      });
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.ValidationError) {
