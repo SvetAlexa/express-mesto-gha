@@ -1,20 +1,20 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { CREATED_CODE, MONGO_DUPLICATE_ERROR_CODE } = require('../utils/utils');
+const { CREATED_CODE, MONGO_DUPLICATE_ERROR_CODE } = require('../utils/errorStatusCode');
 const NotFoundError = require('../errors/NotFoundError');
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const User = require('../models/user');
 
-const { SECRET_KEY = 'SECRET_KEY' } = process.env;
+const { SECRET_KEY, SALT_ROUNDS } = require('../config');
 
 const createUser = (req, res, next) => {
   const {
     name, about, avatar, email,
   } = req.body;
   // создадим документ в БД на основе пришедших данных
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(req.body.password, SALT_ROUNDS)
     .then((hash) => User.create(
       {
         name, about, avatar, email, password: hash, // записываем хеш в базу
@@ -39,7 +39,6 @@ const createUser = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, SECRET_KEY, { expiresIn: '7d' });

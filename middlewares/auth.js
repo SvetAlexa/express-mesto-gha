@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
-const { SECRET_KEY = 'SECRET_KEY' } = process.env;
+const { SECRET_KEY } = require('../config');
 
 const tokenValidation = (req, res, next) => {
   const { authorization } = req.headers;
@@ -16,7 +16,6 @@ const tokenValidation = (req, res, next) => {
   } catch (e) {
     return next(new UnauthorizedError('Необходимо авторизоваться'));
   }
-
   req.user = payload; // записываем пейлоуд в объект запроса
 
   return next(); // пропускаем запрос дальше

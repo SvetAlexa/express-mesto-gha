@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { CREATED_CODE } = require('../utils/utils');
+const { CREATED_CODE } = require('../utils/errorStatusCode');
 const BadRequestError = require('../errors/BadRequestError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');

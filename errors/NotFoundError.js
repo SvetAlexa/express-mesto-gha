@@ -1,4 +1,4 @@
-const { NOT_FOUND_CODE } = require('../utils/utils');
+const { NOT_FOUND_CODE } = require('../utils/errorStatusCode');
 
 class NotFoundError extends Error {
   constructor(message) {

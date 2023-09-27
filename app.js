@@ -7,9 +7,9 @@ const mongoose = require('mongoose');
 const appRouter = require('./routes/index');
 const errorHandle = require('./middlewares/errorHandle');
 
-const { PORT = 3000 } = process.env;
+const { PORT, DB_PATH } = require('./config');
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+mongoose.connect(DB_PATH, {
   useNewUrlParser: true,
 })
   .then(() => console.log('connected to DB'))
