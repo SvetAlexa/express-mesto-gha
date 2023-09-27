@@ -89,11 +89,10 @@ const getAuthorizedUser = (req, res, next) => {
     });
 };
 
-const updateUserById = (req, res, next) => {
-  const { name, about } = req.body;
+function updateUserInfo(req, res, next, id, object) {
   User.findByIdAndUpdate(
-    req.user._id,
-    { name, about },
+    id,
+    object,
     {
       new: true, // обработчик then получит на вход обновлённую запись
       runValidators: true, // данные будут валидированы перед изменением
@@ -106,25 +105,16 @@ const updateUserById = (req, res, next) => {
       return res.send({ data: user });
     })
     .catch(next);
+}
+
+const updateUserById = (req, res, next) => {
+  const { name, about } = req.body;
+  updateUserInfo(req, res, next, req.user._id, { name, about });
 };
 
 const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(
-    req.user._id,
-    { avatar },
-    {
-      new: true, // обработчик then получит на вход обновлённую запись
-      runValidators: true, // данные будут валидированы перед изменением
-    },
-  )
-    .then((user) => {
-      if (!user) {
-        return next(new NotFoundError('Пользователь по указанному _id не найден'));
-      }
-      return res.send({ data: user });
-    })
-    .catch(next);
+  updateUserInfo(req, res, next, req.user._id, { avatar });
 };
 
 module.exports = {
