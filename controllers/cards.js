@@ -24,16 +24,17 @@ const getCards = (req, res, next) => {
 
 const deleteCardById = (req, res, next) => {
   const { cardId } = req.params;
-  Card.findByIdAndRemove(cardId)
+  Card.findById(cardId)
     .then((card) => {
       if (!card) {
-        return next(new NotFoundError('Карточка с указанным _id не найдена'));
+        throw next(new NotFoundError('Карточка с указанным _id не найдена'));
       }
       const ownerId = (card.owner).toString();
       const userId = req.user._id;
       if (ownerId !== userId) {
-        return next(new ForbiddenError('Нельзя удалить чужую карточку'));
+        throw next(new ForbiddenError('Нельзя удалить чужую карточку'));
       }
+      card.deleteOne(card);
       return res.send(card);
     })
     .catch(next);
