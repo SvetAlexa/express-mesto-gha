@@ -27,12 +27,12 @@ const deleteCardById = (req, res, next) => {
   Card.findById(cardId)
     .then((card) => {
       if (!card) {
-        throw next(new NotFoundError('Карточка с указанным _id не найдена'));
+        return next(new NotFoundError('Карточка с указанным _id не найдена'));
       }
       const ownerId = (card.owner).toString();
       const userId = req.user._id;
       if (ownerId !== userId) {
-        throw next(new ForbiddenError('Нельзя удалить чужую карточку'));
+        return next(new ForbiddenError('Нельзя удалить чужую карточку'));
       }
       card.deleteOne(card);
       return res.send(card);
