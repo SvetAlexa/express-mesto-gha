@@ -47,7 +47,3 @@
 * `npm run dev` — запустить сервер с hot-reload
 
 Сервер слушает порт 3000. Изменить порт можно в файле config.js
-
-## Ссылка на репозиторий
-
-[Нажмите на ссылку](https://github.com/SvetAlexa/express-mesto-gha/ "https://github.com/SvetAlexa/express-mesto-gha/")
