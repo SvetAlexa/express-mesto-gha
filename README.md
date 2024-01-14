@@ -38,9 +38,15 @@
 * [Postman](https://www.postman.com/)
 
 ## Запуск проекта
+Предварительные требования: [MongoDB](https://www.mongodb.com/try/download/community) версия 4.4.27
 
-`npm run start` — запускает сервер   
-`npm run dev` — запускает сервер с hot-reload
+* `git clone git@github.com:SvetAlexa/express-mesto-gha.git` склонировать репозиторий  
+* `cd express-mesto-gha` — перейти в папку проекта
+* `npm ci` — установить зависимости  
+* `npm run start` — запуcтить сервер   
+* `npm run dev` — запустить сервер с hot-reload
+
+Сервер слушает порт 3000. Изменить порт можно в файле config.js
 
 ## Ссылка на репозиторий
 
