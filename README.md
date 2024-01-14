@@ -38,7 +38,7 @@
 * [Postman](https://www.postman.com/)
 
 ## Запуск проекта
-Предварительные требования: [MongoDB](https://www.mongodb.com/try/download/community) версия 4.4.27
+Предварительные требования: [Node.js](https://nodejs.org/en) и [MongoDB](https://www.mongodb.com/try/download/community) версия 4
 
 * `git clone git@github.com:SvetAlexa/express-mesto-gha.git` склонировать репозиторий  
 * `cd express-mesto-gha` — перейти в папку проекта
